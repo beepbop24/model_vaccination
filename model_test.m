@@ -1,25 +1,27 @@
 
 function model_test
-tau_1 = 12;
+tau_1 = 10;
 tau_2 = 8;
 tau_35 = 12;
 tau_4 = 9;
 
-sol = dde23(@ddex1de, [tau_1, tau_2, tau_35, tau_4], @ddex1hist, [0, 1000]);
+sol = dde23(@ddex1de, [tau_1, tau_2, tau_35, tau_4], @ddex1hist, [0, 500]);
 disp(sol.y)
 figure;
 plot(sol.x, sol.y)
-ylim([0 1])
+%ylim([0 1])
 title('Innate Immune System Dynamics');
 xlabel('time (h)');
 ylabel('y (# of cells)');
 legend('V', 'X', 'Y', 'R', 'I')
+end
 
 % --------------------------------------------------------------------------
 
 function s = ddex1hist(t)
 % Constant history function for VXYRI.
 s = [0; 100; 1; 0; 0];
+end
 
 % --------------------------------------------------------------------------
 
@@ -46,7 +48,7 @@ params.d_r = 1/50;
 
 % parameter values for I
 params.k_i = 0.3;
-params.b_2 = 80; %0.07;
+params.b_2 = 80;
 params.k_2 = 0.1;
 params.n_2 = 1;
 params.d_i = 0.7;
@@ -61,3 +63,4 @@ dydt = [params.k*ylag1(3)/(params.k1_tilde + ylag3(5)^params.n_1) - params.d_v*y
         params.beta*y(2)*y(1) - params.d_y*y(3) - params.k_iy*y(3)*y(5) 
         params.k_ix*y(2)*y(5) + params.k_iy*y(3)*y(5) - params.d_r*y(4)
         params.k_i * ylag2(3) + (params.b_2*ylag4(5)^params.n_2)/(params.k_2 + ylag4(5)^params.n_2) - params.d_i*y(5)];
+end
