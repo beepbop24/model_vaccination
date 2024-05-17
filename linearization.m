@@ -34,7 +34,13 @@ params.tau_4 = 9;
 h1 = figure(1);
 [X, Y] = meshgrid(linspace(-1, 3, 300), linspace(-3, 3, 300));
 charpoly_Df2 = arrayfun(@(lambda) characEq(lambda, params), X+1i*Y);
-contour(X, Y, charpoly_Df2, [0.001 0.01 0.025 0.05 0.1 0.25 0.5 1 1.25 1.5 2 2.5 5 10 25 50 100])
+contour(X, Y, charpoly_Df2, [0.0001 0.001 0.01 0.025 0.05 0.1 0.25 0.5 1 1.25 1.5 2 2.5 5 10 25 50 100])
+hold on
+plot(-params.d_r, 0, '.')
+hold on
+plot(-params.d_x, 0, '.')
+hold on
+plot(-params.d_i, 0, '.')
 
 % plot along real axis
 h2 = figure(2);
