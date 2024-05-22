@@ -5,8 +5,7 @@ tau_2 = 8;
 tau_35 = 12;
 tau_4 = 9;
 
-sol = dde23(@ddex1de, [tau_1, tau_2, tau_35, tau_4], @ddex1hist, [0, 500]);
-disp(sol.y)
+sol = dde23(@ddex1de, [tau_1, tau_2, tau_35, tau_4], @ddex1hist, [0, 250]);
 figure;
 plot(sol.x, sol.y)
 %ylim([0 1])
@@ -28,10 +27,10 @@ end
 function dydt = ddex1de(t, y, Z)
 % Differential equations function for VXYRI.
 % parameter values for V
-params.k = 40;
-params.k1_tilde = 39.6;
-params.n_1 = 1;
-params.d_v = 1/2;
+params.k = 5; %*
+params.k1_tilde = 39.6; %*
+params.n_1 = 1; %*
+params.d_v = 1/3;
 
 % parameter values for X
 params.mu = 1/312;
@@ -44,7 +43,7 @@ params.d_y = 1/12;
 params.k_iy = 0.5;
 
 % parameter values for R
-params.d_r = 1/50;
+params.d_r = 1/30;
 
 % parameter values for I
 params.k_i = 0.3;
