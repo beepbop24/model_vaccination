@@ -1,7 +1,7 @@
-% parameter values for V
+%% DFE with I^* = 0
 params.k = 40;
 params.k1_tilde = 39.6;
-params.n_1 = 2;
+params.n_1 = 1;
 params.d_v = 1/2;
 
 % parameter values for X
@@ -21,18 +21,14 @@ params.d_r = 1/50;
 params.k_i = 0.3;
 params.b_2 = 80;
 params.k_2 = 0.1;
-params.n_2 = 2;
+params.n_2 = 1;
 params.d_i = 0.7;
 
 % delays
-params.tau_1 = 10;
-params.tau_2 = 8;
-params.tau_35 = 12;
-params.tau_4 = 9;
-
-%% DFE with I^* = 0
-params.n1 = 1;
-params.n2 = 1;
+params.tau_1 = 8;
+params.tau_2 = 6;
+params.tau_35 = 11; % estimated
+params.tau_4 = 9; % estimated
 
 % contour plot -- zoomed out
 h1 = figure(1);
