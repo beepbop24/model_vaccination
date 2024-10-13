@@ -34,8 +34,30 @@ X = linspace(-0.75, 0.1, 100);
 eq_realline('default_params_VXY.mat', params, 'I zero', X, 's_realline_VXY');
 
 
+%%
+% contour plot -- zoomed in
+h5 = figure(5);
+[X, Y] = meshgrid(linspace(-0.6, 0.3, 300), linspace(-0.6, 0.6, 300));
+charpoly_Df2 = arrayfun(@(lambda) characEq(lambda, params, I_star), X+1i*Y);
+contour(X, Y, charpoly_Df2, [0.00001 0.0005 0.0001 0.0005 0.001 0.01 0.025 0.05 0.1 0.25 0.5 1 1.25 1.5 2 2.5 5 10], 'LineWidth', 1.5)
+hold on
+plot(-params.d_x, 0, '.')
+hold on
+plot(-params.d_r, 0, '.')
+hold on
+plot(-params.d_i, 0, '.')
+hold on
+xline(0, 'LineWidth', 1.5)
+hold off
+legend('', '$\lambda_1 = -d_X$', '$\lambda_2 = - d_R$', '$\lambda_3 = -d_I$', 'Interpreter', 'latex', 'Fontsize', 16)
+title('Value of the Characteristic Polynomial of the Linearized System Around DFE', 'Interpreter', 'latex', 'FontSize', 12)
+xlabel('$Re(\lambda)$','Interpreter','latex')
+ylabel('$Im(\lambda)$','Interpreter','latex')
+saveas(h5, 'contour_DFE_star_zoomedin', 'jpeg')
+
+
 %% DISEASE-FREE EQUILIBRIUM CONTOUR PLOT
-% function that produces contour plot of characteristic polynomial about
+% function that produces contour plot of characteristic polynomial around
 % linearized steady state for specific parameters (params), steady state,
 % mesh (X,Y) and name of file that will be saved (title). if no parameters
 % are provided, function will run with default values found in params_file
@@ -89,7 +111,7 @@ end
 
 %% FUNCTION THAT PLOTS CHARACTERISTIC POLYNOMIAL ALONG THE REAL LINE
 % function that produces plot of Re(lambda) of characteristic polynomial
-% about linearized steady state for specific parameters (params), steady
+% around linearized steady state for specific parameters (params), steady
 % state, range (X) and name of file that will be saved (title). if no
 % parameters are provided, function will run with default values found in
 % params_file
@@ -127,8 +149,10 @@ end
 
 
 %% FUNCTION THAT COMPUTES ABSOLUTE VALUE OF CHARACTERISTIC EQUATION
-% function that computes the characteristic polynomial about linearized
-% steady state for specific parameters (params), steady state, and lambda
+% function that computes the characteristic polynomial ab linearized steady state for specific parameters (params), steady
+% state, range (X) and name of file that will be saved (title). if no
+% parameters are provided, function will run with default values found in
+% params_file
 function charpoly_Df = characEq(lambda, I_star, params)
     if I_star == 0
         Df_x0 = [-params.d_v, 0, params.k/params.k1_tilde*exp(-lambda*params.tau_1), 0, 0;
