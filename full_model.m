@@ -1,4 +1,4 @@
-function full_sol = full_model(params_file, params, hist, dde_options, settings)
+function [full_sol, M_full] = full_model(params_file, params, hist, dde_options, settings, title)
     % function that returns numerical simulations of full immune system
     % with INPUTS -- 
     % params_file: default parameters (.mat file)
@@ -26,7 +26,7 @@ function full_sol = full_model(params_file, params, hist, dde_options, settings)
         params.(default_names{missing(k)}) = defaults.(default_names{missing(k)});
     end
 
-    % setting setting values with default if not specified in user input
+    % setting settings values with default if not specified in user input
     default_settings.stiff = true;
     default_settings.manual = true;
     default_settings.tolerance = 5*10^(-5);
@@ -48,14 +48,14 @@ function full_sol = full_model(params_file, params, hist, dde_options, settings)
     % using stiff DDE solver
     if settings.stiff
         stiff_start = tic;
-        full_sol = dde15s_updated(@ddefull, lags, hist, params_struct.tspan, dde_options);  
+        full_sol = dde15s_updated(@ddefull, lags, hist, params.tspan, dde_options);  
         stiff_end = toc(stiff_start);
         disp(['Stiff Time: ', num2str(stiff_end)])
 
     % using regular DDE solver
     else
         reg_start = tic;
-        full_sol = dde23(@ddefull, lags, hist, params_struct.tspan, dde_options);
+        full_sol = dde23(@ddefull, lags, hist, params.tspan, dde_options);
         reg_end = toc(reg_start);
         disp(['Regular Time: ', num2str(reg_end)])
     end
@@ -78,13 +78,16 @@ function full_sol = full_model(params_file, params, hist, dde_options, settings)
 
     % plot of model simulation
     if settings.plot
-        figure();
-        semilogy(xvals, 10.^(yvals))
+        h = figure();
+        semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
         %plot(xvals, yvals)
+        ax = gca;
+        ax.FontSize = 16;
         colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30" "#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
-        xlabel('Time (h)');
-        ylabel('Number of Cells');
+        xlabel('Time (h)', 'FontSize',18);
+        ylabel('Number of Cells', 'FontSize',18);
         legend('$V$', '$X$', '$Y$', '$R$', '$I$', '$B_{LL}$', '$B_E$', '$A$', '$T_E$', '$T_M$', '$T_H$', 'Interpreter', 'latex')
+        saveas(h, fullfile('./simulations', title), 'png')
     end
     
 % -------------------------------------------------------------------------
@@ -103,6 +106,7 @@ function full_sol = full_model(params_file, params, hist, dde_options, settings)
 
         % default computation for Y 
         y_infected = params.beta*y(2)*y(1) - params.d_y*y(3) - params.k_iy*y(3)*y(5)-params.k_tey*y(3)*y(7);
+        %disp(y_infected)
 
         % if variables smaller than tolerance force it to 0 to prevent
         % "reinfections" from occuring
@@ -127,7 +131,8 @@ function full_sol = full_model(params_file, params, hist, dde_options, settings)
 
         if ylag11(1) > params.v_star
             %P = log10(params.t_total-10^(y(10)));
-            t_e = t_e + params.k_te*ylag11(3)*(1-y(7)/(params.t_total-y(8)))*y(5)*y(6); 
+            P = log10(params.t_total^10-ylag11(8)^10);
+            t_e = t_e + params.k_te*ylag11(3)*(1-ylag11(7)/P)*ylag11(5)*ylag11(6); 
         end
 
         % generation of memory T cells post-infection
@@ -158,7 +163,7 @@ function full_sol = full_model(params_file, params, hist, dde_options, settings)
             b_e = b_e + params.k_be*ylag10(1)*ylag10(6);
         end
 
-        dydt = [params.k*ylag1(3)/(params.k1_tilde^params.n_1 + ylag3(5)^params.n_1) - params.d_v*y(1) - params.rhoV*y(1)*y(11)
+        dydt = [params.k*ylag1(3)*params.k1_tilde^params.n_1/(params.k1_tilde^params.n_1 + ylag3(5)^params.n_1) - params.d_v*y(1) - params.rhoV*y(1)*y(11)
                 params.mu - params.d_x*y(2) - params.beta*y(2)*y(1) - params.k_ix*y(2)*y(5)
                 y_infected
                 params.k_ix*y(2)*y(5) + params.k_iy*y(3)*y(5) - params.d_r*y(4)

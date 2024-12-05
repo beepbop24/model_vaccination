@@ -1,5 +1,5 @@
 
-function IIS_sol = IIS_model(params_file, params, hist, options, stiff)
+function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, settings, title)
     % function that returns numerical simulations of innate immune system
     % with INPUTS -- 
     % params_file: default parameters (.mat file)
@@ -21,19 +21,30 @@ function IIS_sol = IIS_model(params_file, params, hist, options, stiff)
         params.(default_names{missing(k)}) = defaults.(default_names{missing(k)});
     end
 
+    default_settings.stiff = true;
+    default_settings.plot = true;
+    
+    default_setting_names = fieldnames(default_settings);
+    setting_names = fieldnames(settings);
+    missing = find(~ismember(default_setting_names, setting_names));
+
+    for k = 1:length(missing)
+        settings.(default_setting_names{missing(k)}) = default_settings.(default_setting_names{missing(k)});
+    end
+
     % setting lags for dde solver
     lags = [params.tau_1, params.tau_2, params.tau_35, params.tau_4];
 
     % using stiff DDE solver
-    if stiff
+    if settings.stiff
         stiff_start = tic;
-        IIS_sol = dde15s_updated(@ddeIIS, lags, hist, params_struct.tspan, options);  
+        IIS_sol = dde15s_updated(@ddeIIS, lags, hist, params.tspan, options);  
         stiff_end = toc(stiff_start);
         disp(['Stiff Time: ', num2str(stiff_end)])
     % using regular DDE solver
     else
         reg_start = tic;
-        IIS_sol = dde23(@ddeIIS, lags, hist, params_struct.tspan, options);
+        IIS_sol = dde23(@ddeIIS, lags, hist, params.tspan, options);
         reg_end = toc(reg_start);
         disp(['Regular Time: ', num2str(reg_end)])
     end
@@ -55,13 +66,17 @@ function IIS_sol = IIS_model(params_file, params, hist, options, stiff)
     disp(peak_summary)
 
     % plot of model simulation
-    h = figure();
-    semilogy(xvals, 10.^(yvals))
-    %plot(xvals, yvals)
-    colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
-    xlabel('Time (h)');
-    ylabel('Number of Cells');
-    legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
+    if settings.plot
+        h = figure();
+        semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
+        ax = gca;
+        ax.FontSize = 16;
+        colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
+        xlabel('Time (h)', 'FontSize', 18);
+        ylabel('Number of Cells', 'FontSize', 18);
+        legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
+        saveas(h, fullfile('./simulations', title), 'png')
+    end
 
 % -------------------------------------------------------------------------
 
@@ -72,7 +87,7 @@ function IIS_sol = IIS_model(params_file, params, hist, options, stiff)
         ylag3 = Z(:,3); %tau_35
         ylag4 = Z(:,4); %tau_4
 
-        dydt = [params.k*ylag1(3)/(params.k1_tilde^params.n_1 + ylag3(5)^params.n_1) - params.d_v*y(1)
+        dydt = [params.k*ylag1(3)*params.k1_tilde^params.n_1/(params.k1_tilde^params.n_1 + ylag3(5)^params.n_1) - params.d_v*y(1)
                 params.mu - params.d_x*y(2) - params.beta*y(2)*y(1) - params.k_ix*y(2)*y(5)
                 params.beta*y(2)*y(1) - params.d_y*y(3) - params.k_iy*y(3)*y(5)
                 params.k_ix*y(2)*y(5) + params.k_iy*y(3)*y(5) - params.d_r*y(4)
