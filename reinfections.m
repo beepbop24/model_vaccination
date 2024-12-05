@@ -191,7 +191,7 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
         init(2) = log10(5.25*10^9); %target cells
         init(3) = y_infected; %infected cells
         init(8) = cons_epi*init(8); %memory T cells
-        init(11) = init(11)-ax*ifi; %antibody
+        init(11) = init(11)+ax*ifi; %antibody
     
         % calculated from antibody
         init(9) = init(11)*params.d_a/params.k_blla; %long-lived b cells
