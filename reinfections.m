@@ -70,8 +70,8 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
 
     % setting up number of previous infections
     if isscalar(re_specs.cons_epi) && re_specs.previous == 100
-        previous = randi([1, 7]);
-    elseif mod(re_specs.previous, 1) == 0 && re_specs.previous < 7 && re_specs.previous >= 0
+        previous = randi([0, 6]);
+    elseif mod(re_specs.previous, 1) == 0 && re_specs.previous < 6 && re_specs.previous >= 0
         previous = re_specs.previous;
     else
         error("Not a valid number of previous infections")
@@ -94,6 +94,31 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
     BE_plot = zeros(iter,  1000);
     A_plot = zeros(iter,  1000);
 
+    % arrays for max (xvals)
+    V_xvals_plot = zeros(iter, 1);
+    X_xvals_plot = zeros(iter, 1);
+    Y_xvals_plot = zeros(iter, 1);
+    R_xvals_plot = zeros(iter, 1);
+    I_xvals_plot = zeros(iter, 1);
+    TH_xvals_plot = zeros(iter, 1);
+    TE_xvals_plot = zeros(iter, 1);
+    TM_xvals_plot = zeros(iter, 1);
+    BLL_xvals_plot = zeros(iter, 1);
+    BE_xvals_plot = zeros(iter, 1);
+    A_xvals_plot = zeros(iter, 1);
+
+    % arrays for max (yvals)
+    V_yvals_plot = zeros(iter, 1);
+    X_yvals_plot = zeros(iter, 1);
+    Y_yvals_plot = zeros(iter, 1);
+    R_yvals_plot = zeros(iter, 1);
+    I_yvals_plot = zeros(iter, 1);
+    TH_yvals_plot = zeros(iter, 1);
+    TE_yvals_plot = zeros(iter, 1);
+    TM_yvals_plot = zeros(iter, 1);
+    BLL_yvals_plot = zeros(iter, 1);
+    BE_yvals_plot = zeros(iter, 1);
+    A_yvals_plot = zeros(iter, 1);
 
     %% iter # of REINFECTIONS
     for i=1:iter
@@ -145,25 +170,25 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
         
         % vax    
         else
+            previous = previous + 1;
             cons_epi = 0;
+            tm_init = init(8);
 
             switch(previous)
-                case 0
-                    ax = -0.025;
                 case 1
-                    ax = -0.025;
+                    ax = -0.0225;
                 case 2
                     ax = -0.03;
                 case 3
-                    ax = -0.0371791;
+                    ax = -0.034;
                 case 4
-                    ax = -0.0413043;
+                    ax = -0.045;
                 case 5
-                    ax = -0.0457608;
+                    ax = -0.0525;
                 case 6
-                    ax = -0.0522826;
+                    ax = -0.06;
                 case 7
-                    ax = -0.0571739;
+                    ax = -0.0675;
             end
         end
 
@@ -190,15 +215,17 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
         % initial number of cells
         init(2) = log10(5.25*10^9); %target cells
         init(3) = y_infected; %infected cells
-        init(8) = cons_epi*init(8); %memory T cells
+        init(8) = log10(cons_epi)+init(8); %memory T cells
         init(11) = init(11)+ax*ifi; %antibody
     
         % calculated from antibody
         init(9) = init(11)*params.d_a/params.k_blla; %long-lived b cells
 
-        full_soli = full_model(params_file, params, @ddefullhist, dde_options, model_settings);
+        [full_soli, I_fulli, M_fulli] = full_model(params_file, params, @ddefullhist, dde_options, model_settings);
         xvals = linspace(full_soli.x(1), full_soli.x(end), 1000);
         yvals = deval(full_soli, xvals);
+
+        I_fulli =  xvals(I_fulli);
      
         % init for next infection
         init = yvals(:, end);
@@ -212,15 +239,49 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
          I_plot(i,:) = yvals(5,:);
          TH_plot(i,:) = yvals(6,:);
          TE_plot(i,:) = yvals(7,:);
+         TM_plot(i,:) = yvals(8,:);
          BE_plot(i,:) = yvals(10,:);
         
         else
-            previous = previous + 1;
+            init(8) = tm_init;
         end
-
-        TM_plot(i,:) = yvals(8,:);
+        
         BLL_plot(i,:) = yvals(9,:);
         A_plot(i,:) = yvals(11,:);
+
+        if type
+            % max -- xvals
+            V_xvals_plot(i) = I_fulli(1)-72.0720720720721;
+            X_xvals_plot(i) = I_fulli(2);
+            Y_xvals_plot(i) = I_fulli(3)-66.0660660660661;
+            R_xvals_plot(i) = I_fulli(4)-74.0740740740741;
+            I_xvals_plot(i) = I_fulli(5)-76.0760760760761;
+            TH_xvals_plot(i) = I_fulli(6)-150.15015015015;
+            TE_xvals_plot(i) = I_fulli(7)-228.228228228228;
+            BE_xvals_plot(i) = I_fulli(10)-174.174174174174;
+            TM_xvals_plot(i) = I_fulli(8)-1169.16916916917;
+
+            % max -- yvals
+            V_yvals_plot(i) = M_fulli(1)-5.96934875912944;
+            X_yvals_plot(i) = M_fulli(2)-9.72015930340596;
+            Y_yvals_plot(i) = M_fulli(3)-9.41854646598383;
+            R_yvals_plot(i) = M_fulli(4)-1.25171577460746;
+            I_yvals_plot(i) = M_fulli(5)-1.41198891304565;
+            TH_yvals_plot(i) = M_fulli(6)-3.72166459225794;
+            TE_yvals_plot(i) = M_fulli(7)-4.74732290014939;
+            BE_yvals_plot(i) = M_fulli(10)-3.21590416352541;
+            TM_yvals_plot(i) = M_fulli(8)-4.17645717510028;
+
+        else
+            TM_yvals_plot(i) = tm_init-4.17645717510028;
+        end
+
+        
+        BLL_xvals_plot(i) = I_fulli(9)-166.166166166166;
+        A_xvals_plot(i) = I_fulli(11)-514.514514514515;
+
+        BLL_yvals_plot(i) = M_fulli(9)-3.58456336894704;
+        A_yvals_plot(i) = M_fulli(11)-2.87401957398719;
 
         % summary of specs display
         variables = {'Conserved Epitopes', 'Type of Infection', 'Number of Months Since Previous', 'Number of Previous', 'Season', 'Iteration'}';
@@ -229,6 +290,7 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
         summary = cell2table([variables, num2cell(values)], 'VariableNames', columns);
         summary.(1) = categorical(summary.(1));
         disp(summary)
+
     end
 
     % plot for each variable
@@ -243,13 +305,110 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
     plot_var(xvals, BLL_plot)
     plot_var(xvals, BE_plot)
     plot_var(xvals, A_plot)
+
+    % plot for xvals (timing shift)
+    x = linspace(1, iter, iter);
+    figure();
+    a = gca;
+    a.FontSize = 16;
+    colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
+    isNZ = (~V_xvals_plot == 0);      
+    scatter(x(isNZ), V_xvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~X_xvals_plot == 0);      
+    scatter(x(isNZ), X_xvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~Y_xvals_plot == 0);      
+    scatter(x(isNZ), Y_xvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~R_xvals_plot == 0);      
+    scatter(x(isNZ), R_xvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~I_xvals_plot == 0);      
+    scatter(x(isNZ), I_xvals_plot(isNZ), "filled");
+    hold off
+    legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
+    xlabel('Iteration', 'FontSize', 18);
+    ylabel('Time (h)', 'FontSize', 18);
+
+    figure();
+    a = gca;
+    a.FontSize = 16;
+    colororder(["#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
+    isNZ = (~TH_xvals_plot == 0);      
+    scatter(x(isNZ), TH_xvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~TE_xvals_plot == 0);      
+    scatter(x(isNZ), TE_xvals_plot(isNZ), "filled");
+    hold on
+    scatter(x, TM_xvals_plot, "filled");
+    hold on
+    scatter(x, BLL_xvals_plot, "filled");
+    hold on
+    isNZ = (~BE_xvals_plot == 0);      
+    scatter(x(isNZ), BE_xvals_plot(isNZ), "filled");
+    hold on
+    scatter(x, A_xvals_plot, "filled");
+    hold off
+    legend('$T_H$', '$T_E$', '$T_M$', '$B_{LL}$', '$B_E$', '$A$', 'Interpreter', 'latex')
+    xlabel('Iteration', 'FontSize',18);
+    ylabel('Time (h)', 'FontSize',18);
+
+    % plot for yvals (peak shift)
+    x = linspace(1, iter, iter);
+    figure();
+    a = gca;
+    a.FontSize = 16;
+    colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
+    isNZ = (~V_yvals_plot == 0);      
+    scatter(x(isNZ), V_yvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~X_yvals_plot == 0);      
+    scatter(x(isNZ), X_yvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~Y_yvals_plot == 0);      
+    scatter(x(isNZ), Y_yvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~R_yvals_plot == 0);      
+    scatter(x(isNZ), R_yvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~I_yvals_plot == 0);      
+    scatter(x(isNZ), I_yvals_plot(isNZ), "filled");
+    hold off
+    legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
+    xlabel('Iteration', 'FontSize', 18);
+    ylabel('log10 Fold Change', 'FontSize', 18);
+    
+    figure();
+    a = gca;
+    a.FontSize = 16;
+    colororder(["#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
+    isNZ = (~TH_yvals_plot == 0);      
+    scatter(x(isNZ), TH_yvals_plot(isNZ), "filled");
+    hold on
+    isNZ = (~TE_yvals_plot == 0);      
+    scatter(x(isNZ), TE_yvals_plot(isNZ), "filled");
+    hold on
+    scatter(x, TM_yvals_plot, "filled");
+    hold on
+    scatter(x, BLL_yvals_plot, "filled");
+    hold on
+    isNZ = (~BE_yvals_plot == 0);      
+    scatter(x(isNZ), BE_yvals_plot(isNZ), "filled");
+    hold on
+    scatter(x, A_yvals_plot, "filled");
+    hold off
+    legend('$T_H$', '$T_E$', '$T_M$', '$B_{LL}$', '$B_E$', '$A$', 'Interpreter', 'latex')
+    xlabel('Iteration', 'FontSize', 18);
+    ylabel('log10 Fold Change', 'FontSize', 18);
+
     
     function plot_var(xvals, yvals)
-        j = 0:iter;
+        j = 1:iter;
         figure();
         a = gca;
         a.FontSize = 16;
-        semilogy(xvals, 10.^(yvals))
+        semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
         xlabel('Time (h)', 'FontSize',18);
         ylabel('Number of Cells', 'FontSize',18);
         legend (sprintfc('G%i', j));

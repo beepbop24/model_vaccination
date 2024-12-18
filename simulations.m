@@ -5,7 +5,7 @@ options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 settings = struct();
 %settings.plot = false;
 
-full_sol = full_model("default_params_full.mat", params, @ddefullhist, options, settings, 'default_model');
+[full_sol, I_full, M_full] = full_model("default_params_full.mat", params, @ddefullhist, options, settings, 'default_model');
 
 %% DEFAULT RUN FOR FIRST INFECTION WITH NO PREVIOUS IMMUNITY
 clearvars;
