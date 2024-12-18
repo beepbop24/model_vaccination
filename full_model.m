@@ -1,4 +1,4 @@
-function [full_sol, M_full] = full_model(params_file, params, hist, dde_options, settings, title)
+function [full_sol, I_full, M_full] = full_model(params_file, params, hist, dde_options, settings, title)
     % function that returns numerical simulations of full immune system
     % with INPUTS -- 
     % params_file: default parameters (.mat file)
