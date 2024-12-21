@@ -249,39 +249,40 @@ function reinfection_sol = reinfections(params_file, params, dde_options, model_
         BLL_plot(i,:) = yvals(9,:);
         A_plot(i,:) = yvals(11,:);
 
-        if type
+          if type
             % max -- xvals
             V_xvals_plot(i) = I_fulli(1)-72.0720720720721;
             X_xvals_plot(i) = I_fulli(2);
             Y_xvals_plot(i) = I_fulli(3)-66.0660660660661;
-            R_xvals_plot(i) = I_fulli(4)-74.0740740740741;
+            R_xvals_plot(i) = I_fulli(4)-76.0760760760761;
             I_xvals_plot(i) = I_fulli(5)-76.0760760760761;
-            TH_xvals_plot(i) = I_fulli(6)-150.15015015015;
+            TH_xvals_plot(i) = I_fulli(6)-152.152152152152;
             TE_xvals_plot(i) = I_fulli(7)-228.228228228228;
+            TM_xvals_plot(i) = I_fulli(8)-1171.17117117117;
             BE_xvals_plot(i) = I_fulli(10)-174.174174174174;
-            TM_xvals_plot(i) = I_fulli(8)-1169.16916916917;
-
+            
             % max -- yvals
-            V_yvals_plot(i) = M_fulli(1)-5.96934875912944;
+            V_yvals_plot(i) = M_fulli(1)-5.97800884303669;
             X_yvals_plot(i) = M_fulli(2)-9.72015930340596;
-            Y_yvals_plot(i) = M_fulli(3)-9.41854646598383;
-            R_yvals_plot(i) = M_fulli(4)-1.25171577460746;
-            I_yvals_plot(i) = M_fulli(5)-1.41198891304565;
-            TH_yvals_plot(i) = M_fulli(6)-3.72166459225794;
-            TE_yvals_plot(i) = M_fulli(7)-4.74732290014939;
-            BE_yvals_plot(i) = M_fulli(10)-3.21590416352541;
-            TM_yvals_plot(i) = M_fulli(8)-4.17645717510028;
+            Y_yvals_plot(i) = M_fulli(3)-9.43598703288781;
+            R_yvals_plot(i) = M_fulli(4)-1.25376219956616;
+            I_yvals_plot(i) = M_fulli(5)-1.41419787061428;
+            TH_yvals_plot(i) = M_fulli(6)-3.71458365203661;
+            TE_yvals_plot(i) = M_fulli(7)-4.71652536931099;
+            TM_yvals_plot(i) = M_fulli(8)-4.18255795817746;
+            BE_yvals_plot(i) = M_fulli(10)-2.96339000918377;
+            
 
         else
-            TM_yvals_plot(i) = tm_init-4.17645717510028;
+            TM_yvals_plot(i) = tm_init-4.18255795817746;
         end
 
         
         BLL_xvals_plot(i) = I_fulli(9)-166.166166166166;
-        A_xvals_plot(i) = I_fulli(11)-514.514514514515;
+        A_xvals_plot(i) = I_fulli(11)-540.540540540541;
 
-        BLL_yvals_plot(i) = M_fulli(9)-3.58456336894704;
-        A_yvals_plot(i) = M_fulli(11)-2.87401957398719;
+        BLL_yvals_plot(i) = M_fulli(9)-3.55169736695018;
+        A_yvals_plot(i) = M_fulli(11)-2.8033450921344;
 
         % summary of specs display
         variables = {'Conserved Epitopes', 'Type of Infection', 'Number of Months Since Previous', 'Number of Previous', 'Season', 'Iteration'}';
