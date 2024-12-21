@@ -32,23 +32,23 @@ defaults.k_ith = 0.003;
 defaults.v_star = 4; %O 
 
 % parameter values for T_H
-defaults.k_th = 0.0038; %OK
+defaults.k_th = 0.003765; %OK
 defaults.d_th = 0.006; %OK
 
 % parameter values for T_E
-defaults.k_te = 0.001505;
+defaults.k_te = 0.001485;
 defaults.t_total = log10(5.2*10^4); %OK
-defaults.k_tetm = 6.84050848346*10^(-5);
+defaults.k_tetm = 6.566773438*10^(-5);
 defaults.d_tepi = 0.90*(log10(52000)/336); %OK
 defaults.d_te = 0.002/24; %OK
 defaults.d_tmpi = 0.1*(log10(52000)/336); %OK
 
 % parameter values for B_LL
-defaults.k_bll = 0.00178625285; %OK 
+defaults.k_bll = 0.001757485336; %OK 
 defaults.k_bllbe = 0.00075;
 
 % parameter values for B_E
-defaults.k_be = 0.0025;
+defaults.k_be = 0.00225;
 defaults.d_be = 0.01; %OK
 
 % parameter values for A
