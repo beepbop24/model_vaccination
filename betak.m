@@ -6,27 +6,11 @@ options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 100);
+beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
 death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
-
-%% DEFAULT RUN -- NO B CELL COMPARTMENT
-clearvars;
-params = struct();
-options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
-
-% parameter values for B_LL
-params.k_bll = 0; 
-params.k_bllbe = 0;
-% parameter values for B_E
-params.k_be = 0;
-params.d_be = 0;
-% parameter values for A
-params.d_a = 0;
-params.k_blla = 0;
-params.k_bea = 0;
 
 %% DEFAULT RUN FOR INFECTION -- IIS MODEL
 clearvars;
@@ -36,7 +20,7 @@ options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 100);
+beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
 death_criteria = 0.9;
 
@@ -54,7 +38,7 @@ params.k_i = 0;
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 100);
+beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
 death_criteria = 0.9;
 
