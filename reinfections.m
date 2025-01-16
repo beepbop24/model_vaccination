@@ -1,4 +1,4 @@
-function reinfection_sol = reinfections(params_file, params, dde_options, model_settings, init, iter, re_specs)
+function reinfections(params_file, params, dde_options, model_settings, init, iter, re_specs)
     % function that returns numerical simulations of the full immune system
     % for reinfections with INPUTS -- 
     % params_file: default parameters (.mat file)
