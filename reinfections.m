@@ -12,12 +12,7 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     % model_settings can be empty -- if so will run with defaults
     % init:  history function of the DDE (function of t) for the first
     % infection
-    % iter: number of reinfections (total number of infections includes
-    % original infection so it's iter + 1)
-    % plot_type: "all" (each infection = 1 plot with all variables) or 
-    % "over" (each variable = 1 plot with all infections + reinfections)
-    % time: time between reinfections (immunity decreases over long periods
-    % of time)
+    % iter: number of infections 
     % re_specs.cons_epi: float percentage (e.g. 0.7) of conserved epitopes
     % between infections or "rand"
     % re_specs.ifi: inter flu interval: integer number of months between
@@ -403,7 +398,6 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     xlabel('Iteration', 'FontSize', 18);
     ylabel('log10 Fold Change', 'FontSize', 18);
 
-    
     function plot_var(xvals, yvals)
         j = 1:iter;
         figure();
