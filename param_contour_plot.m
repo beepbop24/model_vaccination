@@ -1,4 +1,15 @@
-function param_contour_plot(model, death_criteria, params_file, params, hist, options, beta_vals, k_vals, option, title)
+function param_contour_plot(model, params_file, params, hist, options, beta_vals, k_vals, option, title)
+    % function that returns numerical simulations of the full immune system
+    % for reinfections with INPUTS -- 
+    % model: 'full' or 'iis'
+    % params_file: default parameters (.mat file)
+    % params = struct() of specified parameters (can be empty)
+    % options = ddeset options
+    % hist:  history function of the DDE (function of t)
+    % beta_vals, k_vals: linspace of parameter values for beta, k_v
+    % option: 1 (peak number of infected cells) or 2 (total number of infected cells)
+    % title: name of png file generated
+
     settings = struct();
     settings.plot = false;
 
@@ -42,6 +53,8 @@ function param_contour_plot(model, death_criteria, params_file, params, hist, op
     ax.FontSize = 16;
     xlabel('$\beta$','Interpreter','latex', 'FontSize', 24)
     ylabel('$k_V$','Interpreter','latex', 'FontSize', 24)
+    xticks([0 0.01 0.02 0.03 0.04 0.05])
+    yticks([0 0.2 0.4 0.6 0.8 1])
     %contourcmap("turbo",[0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1], "Colorbar","on","Location", "horizontal", "TitleString","% of Lungs Infected")
-    saveas(h, fullfile('./simulations', title), 'png')
+    saveas(h, fullfile('./betak', title), 'png')
 end
