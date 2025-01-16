@@ -69,6 +69,16 @@ function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, setti
     if settings.plot
         h = figure();
         semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
+   
+        if settings.dashed
+            hold on
+            yline(5.25*10^9, '--', 'LineWidth', 1.5, 'Color', 'black')
+            xval = find(yvals(3, :) >= log10(5.25*10^9), 1);
+            disp(xval);
+            xline(xvals(xval), '--', 'LineWidth', 1.5, 'Color', 'black')
+        end
+        
+        hold off
         ax = gca;
         ax.FontSize = 16;
         colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])

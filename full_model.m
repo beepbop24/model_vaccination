@@ -31,6 +31,7 @@ function [full_sol, I_full, M_full] = full_model(params_file, params, hist, dde_
     default_settings.manual = true;
     default_settings.tolerance = 5*10^(-5);
     default_settings.plot = true;
+    default_settings.dashed = false;
     
     default_setting_names = fieldnames(default_settings);
     setting_names = fieldnames(settings);
@@ -80,7 +81,16 @@ function [full_sol, I_full, M_full] = full_model(params_file, params, hist, dde_
     if settings.plot
         h = figure();
         semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
-        %plot(xvals, yvals)
+
+        if settings.dashed
+            hold on
+            yline(5.25*10^9, '--', 'LineWidth', 1.5, 'Color', 'black')
+            xval = find(yvals(3, :) >= log10(5.25*10^9), 1);
+            disp(xval);
+            xline(xvals(xval), '--', 'LineWidth', 1.5, 'Color', 'black')
+        end
+        
+        hold off
         ax = gca;
         ax.FontSize = 16;
         colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30" "#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
