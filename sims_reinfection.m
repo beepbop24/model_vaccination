@@ -61,7 +61,6 @@ iter = 10;
 
 reinfections("default_params_full.mat", params, options, model_settings, init, iter, re_specs)
 
-
 % random season 
 clearvars;
 params = struct();
