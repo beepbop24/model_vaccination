@@ -1,23 +1,17 @@
-function inset_plots(params_file, params, hist, dde_options, settings, steady_state_I, state, title)
+function inset_plots(params_file, params, hist, dde_options, settings, steady_state, state, title)
     % function that returns numerical simulations of innate immune system
-    % with inset representing convergence to DF or E (for viral dynamics)
-    % steady state 
+    % with inset representing convergence to DF steady state 
     % params_file: default parameters (.mat file)
     % params = struct() of specified parameters (can be empty)
     % hist:  history function of the DDE (function of t) for the first
     % infection
     % dde_options = ddeset options
     % model_settings.stiff: boolean -- if true use stiff solver
-    % model_settings.manual: boolean -- if manual true, when number of infected
-    % cells < tolerance, it is set to 0 (to ensure infection doesn't
-    % artifically blow up)
-    % model_settings.tolerance: value at which infection is considered to 
-    % be eliminated 
+    % model_settings.manual: boolean -- if manual true, when number of infected cells <
+    % tolerance, it is set to 0 (to ensure infection doesn't artifically blow up
+    % model_settings.tolerance: value at which infection is considered to be eliminated 
     % model_settings can be empty -- if so will run with defaults
-    % steady_state_I: 'I zero' or 'I star'
-    % state: 'iis_DF', 'viral_DF' or 'viral_E'
-    % title: name of png file that will be saved.
-
+    % steady_state
     settings.plot = false;
     IIS_sol = IIS_model(params_file, params, hist, dde_options, settings);
 
@@ -40,9 +34,9 @@ function inset_plots(params_file, params, hist, dde_options, settings, steady_st
    
 
     if strcmp(state, 'iis_DF')
-        if strcmp(steady_state_I, 'I zero')
+        if strcmp(steady_state, 'I zero')
             i_star = 0;
-        elseif strcmp(steady_state_I, 'I star')
+        elseif strcmp(steady_state, 'I star')
             i_star = params.b_2/params.d_i - params.k_2;
         else
             error('Not a valid steady state definition');
