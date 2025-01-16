@@ -6,8 +6,8 @@ options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 10);
-k_vals = linspace(0.1, 1, 10);
+beta_vals = linspace(10^(-3), 5*10^(-2), 20);
+k_vals = linspace(10^(-3), 1, 20);
 death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'default_betak_2');
@@ -31,11 +31,11 @@ params.k_bea = 0;
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 10);
-k_vals = linspace(0.1, 1, 10);
+beta_vals = linspace(10^(-3), 5*10^(-2), 20);
+k_vals = linspace(10^(-3), 1, 20);
 death_criteria = 0.9;
 
-param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoB, options, beta_vals, k_vals, 2, 'noB_betak');
+%param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoB, options, beta_vals, k_vals, 2, 'noB_betak');
 
 %% DEFAULT RUN -- NO T CELL COMPARTMENT
 clearvars;
@@ -52,8 +52,8 @@ params.d_tmpi = 0;
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 10);
-k_vals = linspace(0.1, 1, 10);
+beta_vals = linspace(10^(-3), 5*10^(-2), 20);
+k_vals = linspace(10^(-3), 1, 20);
 death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoT, options, beta_vals, k_vals, 2, 'noT_betak');
@@ -71,8 +71,8 @@ params.k_ith = 0;
 % contour plot for beta, k_V
 params.tspan = [0, 300];
 
-beta_vals = linspace(10^(-2), 5*10^(-2), 10);
-k_vals = linspace(0.1, 1, 10);
+beta_vals = linspace(10^(-3), 5*10^(-2), 20);
+k_vals = linspace(10^(-3), 1, 20);
 death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'noIFN_betak');
