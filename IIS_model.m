@@ -74,7 +74,6 @@ function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, setti
             hold on
             yline(5.25*10^9, '--', 'LineWidth', 1.5, 'Color', 'black')
             xval = find(yvals(3, :) >= log10(5.25*10^9), 1);
-            disp(xval);
             xline(xvals(xval), '--', 'LineWidth', 1.5, 'Color', 'black')
         end
         
