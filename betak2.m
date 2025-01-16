@@ -8,7 +8,6 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
-death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'default_betak_2');
 
@@ -33,9 +32,8 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
-death_criteria = 0.9;
 
-%param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoB, options, beta_vals, k_vals, 2, 'noB_betak');
+param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoB, options, beta_vals, k_vals, 2, 'noB_betak');
 
 %% DEFAULT RUN -- NO T CELL COMPARTMENT
 clearvars;
@@ -54,7 +52,6 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
-death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoT, options, beta_vals, k_vals, 2, 'noT_betak');
 
@@ -73,7 +70,6 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
-death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'noIFN_betak');
 
@@ -81,11 +77,6 @@ param_contour_plot("full", death_criteria, "default_params_full.mat", params, @d
 function s = ddefullhist(t)
     % constant history function for full model.
     s = [0; log10(5.25*10^9); log10(5250); 0; 0; 0; 0; 4; log10(90.5); 0; log10(30);];
-end
-
-function s = ddefullhist0(t)
-    % constant history function for full model -- Generation 0
-    s = [0; log10(5.25*10^9); log10(5250); 0; 0; 0; 0; 0; 0; 0; 0];
 end
 
 function s = ddefullhistnoB(t)
@@ -97,10 +88,4 @@ function s = ddefullhistnoT(t)
     % constant history function for full model -- no T
     s = [0; log10(5.25*10^9); log10(5250); 0; 0; 0; 0; 0; log10(90.5); 0; log10(30);];
 end
-
-function s = ddeIIShist(t)
-    % constant history function for VXYRI.
-    s = [0; log10(5.25*10^9); log10(5250); 0; 0];
-end
-
 

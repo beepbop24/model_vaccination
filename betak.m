@@ -8,7 +8,6 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
-death_criteria = 0.9;
 
 param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
 
@@ -22,7 +21,6 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
-death_criteria = 0.9;
 
 param_contour_plot("iis", death_criteria, "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'iis_betak');
 
@@ -40,7 +38,6 @@ params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
-death_criteria = 0.9;
 
 param_contour_plot("iis", death_criteria, "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'viral_betak');
 
