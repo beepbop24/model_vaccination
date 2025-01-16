@@ -9,7 +9,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
 
-param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'default_betak_2');
+param_contour_plot("full", "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'default_betak_2');
 
 %% DEFAULT RUN -- NO B CELL COMPARTMENT
 clearvars;
@@ -33,7 +33,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
 
-param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoB, options, beta_vals, k_vals, 2, 'noB_betak');
+param_contour_plot("full", "default_params_full.mat", params, @ddefullhistnoB, options, beta_vals, k_vals, 2, 'noB_betak');
 
 %% DEFAULT RUN -- NO T CELL COMPARTMENT
 clearvars;
@@ -53,7 +53,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
 
-param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhistnoT, options, beta_vals, k_vals, 2, 'noT_betak');
+param_contour_plot("full", "default_params_full.mat", params, @ddefullhistnoT, options, beta_vals, k_vals, 2, 'noT_betak');
 
 %% DEFAULT RUN -- NO IFN MODEL
 clearvars;
@@ -71,7 +71,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 20);
 k_vals = linspace(10^(-3), 1, 20);
 
-param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'noIFN_betak');
+param_contour_plot("full", "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 2, 'noIFN_betak');
 
 %% HISTORY FUNCTIONS FOR VARIOUS SCENARIOS
 function s = ddefullhist(t)

@@ -9,7 +9,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
 
-param_contour_plot("full", death_criteria, "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
+param_contour_plot("full", "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
 
 %% DEFAULT RUN FOR INFECTION -- IIS MODEL
 clearvars;
@@ -22,7 +22,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
 
-param_contour_plot("iis", death_criteria, "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'iis_betak');
+param_contour_plot("iis", "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'iis_betak');
 
 
 %% DEFAULT RUN FOR INFECTION WITH NO IMMUNE SYSTEM AT ALL -- IIS MODEL
@@ -39,7 +39,7 @@ params.tspan = [0, 300];
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
 k_vals = linspace(0.1, 1, 100);
 
-param_contour_plot("iis", death_criteria, "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'viral_betak');
+param_contour_plot("iis", "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'viral_betak');
 
 %% HISTORY FUNCTIONS FOR VARIOUS SCENARIOS
 function s = ddefullhist(t)
