@@ -38,13 +38,13 @@ defaults.d_th = 0.006; %OK
 % parameter values for T_E
 defaults.k_te = 0.001485;
 defaults.t_total = log10(5.2*10^4); %OK
-defaults.k_tetm = 6.566773438*10^(-5);
+defaults.k_tetm = 6.580050090*10^(-5);
 defaults.d_tepi = 0.90*(log10(52000)/336); %OK
 defaults.d_te = 0.002/24; %OK
 defaults.d_tmpi = 0.1*(log10(52000)/336); %OK
 
 % parameter values for B_LL
-defaults.k_bll = 0.001757485336; %OK 
+defaults.k_bll = 0.001758133200; %OK 
 defaults.k_bllbe = 0.00075;
 
 % parameter values for B_E
@@ -61,7 +61,7 @@ defaults.rhoA = 0.000005;
 defaults.tau_1 = 8; %OK
 defaults.tau_2 = 6; %OK
 defaults.tau_35 = 5; 
-defaults.tau_4 = 6; 
+defaults.tau_4 = 6;
 defaults.tau_6 = 5; %OK
 defaults.tau_7 = 7;
 defaults.tau_8 = 10;
@@ -70,6 +70,6 @@ defaults.tau_10 = 20;
 defaults.tau_11 = 72; %OK
 
 % duration of simulation
-defaults.tspan = [0, 2000];
+defaults.tspan = [0, 800];
 
 save('default_params_full.mat','defaults','defaults');
