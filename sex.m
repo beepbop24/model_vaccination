@@ -15,7 +15,7 @@ params.d_th = 0.006*0.8;
 params.k_te = 0.001485*0.985;
 params.k_bll = 0.001757485336*0.95;
 
-[full_sol, I_full, M_full] = full_model("default_params_full.mat", params, @ddefullhist, options, settings, 'default_model');
+full_sol = full_model("default_params_full.mat", params, @ddefullhist, options, settings, 'default_model');
 
 %% male reinfections
 re_specs = struct();
@@ -54,7 +54,7 @@ params.d_th = 0.006*1.35;
 params.k_te = 0.001485*1.07;
 params.k_bll = 0.001757485336*1.1;
 
-[full_sol, I_full, M_full] = full_model("default_params_full.mat", params, @ddefullhist, options, settings, 'default_model');
+full_sol = full_model("default_params_full.mat", params, @ddefullhist, options, settings, 'default_model');
 
 %% female reinfections
 re_specs = struct();
