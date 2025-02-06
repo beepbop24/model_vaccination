@@ -4,10 +4,10 @@ params = struct();
 options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 
 % contour plot for beta, k_V
-params.tspan = [0, 300];
+params.tspan = [0, 500];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
-k_vals = linspace(0.1, 1, 100);
+k_vals = linspace(10^(-3), 1, 100);
 
 param_contour_plot("full", "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
 
@@ -20,7 +20,7 @@ options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
-k_vals = linspace(0.1, 1, 100);
+k_vals = linspace(10^(-3), 1, 100);
 
 param_contour_plot("iis", "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'iis_betak');
 
@@ -37,7 +37,7 @@ params.k_i = 0;
 params.tspan = [0, 300];
 
 beta_vals = linspace(10^(-3), 5*10^(-2), 100);
-k_vals = linspace(0.1, 1, 100);
+k_vals = linspace(10^(-3), 1, 100);
 
 param_contour_plot("iis", "default_params_full.mat", params, @ddeIIShist, options, beta_vals, k_vals, 1, 'viral_betak');
 
