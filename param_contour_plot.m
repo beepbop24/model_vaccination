@@ -23,12 +23,13 @@ function param_contour_plot(model, params_file, params, hist, options, beta_vals
         for j=1:n
             params.k = k_vals(j);
             if strcmp(model, "full")
-                [sol, M_full] = full_model(params_file, params, hist, options, settings);
+                [sol, I_full, M_full] = full_model(params_file, params, hist, options, settings);
             elseif strcmp(model, "iis")
                 [sol, M_full] = IIS_model(params_file, params, hist, options, settings);
             else
                 error('Not a valid model');
             end
+
             if option==1
                 heat_matrix(i, j) = (10^M_full(3))/(5.25*10^9);
             elseif option==2
