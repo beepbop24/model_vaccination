@@ -11,7 +11,7 @@ settings.manual = false;
 full_sol3 = full_model("default_params_full.mat", params, @ddefullhist3, options, settings, 'initv_model');
 
 settings.manual = false;
-full_sol4 = full_model("default_params_full.mat", params, @ddefullhistjump, options, settings, 'initv_model');
+full_sol4 = full_model("default_params_full.mat", params, @ddefullhistjump, options, settings, 'initjump_model');
 
 %% HISTORY FUNCTIONS
 function s = ddefullhist(t)
