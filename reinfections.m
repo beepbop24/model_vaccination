@@ -123,8 +123,11 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
         % {1, .., 60}
         if isscalar(re_specs.ifi) && re_specs.ifi == 100
             ifi = normrnd(36, 12);
+            while ifi < 0
+                ifi = normrnd(36, 12);
+            end
 
-        elseif mod(re_specs.ifi(i), 1) == 0 && re_specs.ifi(i) < 60 && re_specs.ifi(i) >= 0
+        elseif mod(re_specs.ifi(i), 1) == 0 && re_specs.ifi(i) <= 60 && re_specs.ifi(i) >= 0
             ifi = re_specs.ifi(i);
         else
             error("Not a valid 'months since last infection' value")
@@ -156,34 +159,30 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
                 error("Not a valid percentage of conserved epitopes")
             end
 
-            % "similar" infection
-            if cons_epi > 0.7
-                ax = -30*0.5/1095;
-            else
-                ax = -30*0.00125;
-            end
+            % antibody decrease
+            ax = log(2)/48;
         
         % vax    
         else
             previous = previous + 1;
-            cons_epi = 0;
+            cons_epi = 1;
             tm_init = init(8);
 
             switch(previous)
                 case 1
-                    ax = -0.0225;
+                    ax = log(2)/32;
                 case 2
-                    ax = -0.03;
+                    ax = log(2)/28;
                 case 3
-                    ax = -0.034;
+                    ax = log(2)/24;
                 case 4
-                    ax = -0.045;
+                    ax = log(2)/20;
                 case 5
-                    ax = -0.0525;
+                    ax = log(2)/17;
                 case 6
-                    ax = -0.06;
+                    ax = log(2)/13;
                 case 7
-                    ax = -0.0675;
+                    ax = log(2)/9;
             end
         end
 
@@ -202,23 +201,26 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     
         % if winter, IFN inhibition of virus less effective
         if ~season 
-            params.n_1 = 0.95*1.775;
-        else
             params.n_1 = 1.775;
+        else
+            params.n_1 = 1.05*1.775;
         end
     
         % initial number of cells
         init(2) = log10(5.25*10^9); %target cells
         init(3) = y_infected; %infected cells
         init(8) = log10(cons_epi)+init(8); %memory T cells
-        init(11) = init(11)+ax*ifi; %antibody
+        init(11) = log10(cons_epi)+init(11)+log10(exp(-ax*ifi)); %antibody
     
         % calculated from antibody
         init(9) = init(11)*params.d_a/params.k_blla; %long-lived b cells
 
         [full_soli, I_fulli, M_fulli] = full_model(params_file, params, @ddefullhist, dde_options, model_settings);
+        I_fulli = real(I_fulli);
+        M_fulli = real(M_fulli);
+
         xvals = linspace(full_soli.x(1), full_soli.x(end), 1000);
-        yvals = deval(full_soli, xvals);
+        yvals = real(deval(full_soli, xvals));
 
         I_fulli =  xvals(I_fulli);
      
@@ -244,7 +246,7 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
         BLL_plot(i,:) = yvals(9,:);
         A_plot(i,:) = yvals(11,:);
 
-          if type
+        if type
             % max -- xvals
             V_xvals_plot(i) = I_fulli(1)-72.0720720720721;
             X_xvals_plot(i) = I_fulli(2);
@@ -267,9 +269,6 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
             TM_yvals_plot(i) = M_fulli(8)-4.18255795817746;
             BE_yvals_plot(i) = M_fulli(10)-2.96339000918377;
             
-
-        else
-            TM_yvals_plot(i) = tm_init-4.18255795817746;
         end
 
         
@@ -290,23 +289,21 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     end
 
     % plot for each variable
-    plot_var(xvals, V_plot)
-    plot_var(xvals, X_plot)
-    plot_var(xvals, Y_plot)
-    plot_var(xvals, R_plot)
-    plot_var(xvals, I_plot)
-    plot_var(xvals, TH_plot)
-    plot_var(xvals, TE_plot)
-    plot_var(xvals, TM_plot)
-    plot_var(xvals, BLL_plot)
-    plot_var(xvals, BE_plot)
-    plot_var(xvals, A_plot)
+    plot_var(xvals, V_plot, 'V')
+    plot_var(xvals, X_plot, 'X')
+    plot_var(xvals, Y_plot, 'Y')
+    plot_var(xvals, R_plot, 'R')
+    plot_var(xvals, I_plot, 'I')
+    plot_var(xvals, TH_plot, 'TH')
+    plot_var(xvals, TE_plot, 'TE')
+    plot_var(xvals, TM_plot, 'TM')
+    plot_var(xvals, BLL_plot, 'BLL')
+    plot_var(xvals, BE_plot, 'BE')
+    plot_var(xvals, A_plot, 'A')
 
     % plot for xvals (timing shift)
     x = linspace(1, iter, iter);
     figure();
-    a = gca;
-    a.FontSize = 16;
     colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
     isNZ = (~V_xvals_plot == 0);      
     scatter(x(isNZ), V_xvals_plot(isNZ), "filled");
@@ -323,13 +320,13 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     isNZ = (~I_xvals_plot == 0);      
     scatter(x(isNZ), I_xvals_plot(isNZ), "filled");
     hold off
+    a = gca;
+    a.FontSize = 16;
     legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
     xlabel('Iteration', 'FontSize', 18);
     ylabel('Time (h)', 'FontSize', 18);
 
     figure();
-    a = gca;
-    a.FontSize = 16;
     colororder(["#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
     isNZ = (~TH_xvals_plot == 0);      
     scatter(x(isNZ), TH_xvals_plot(isNZ), "filled");
@@ -346,6 +343,8 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     hold on
     scatter(x, A_xvals_plot, "filled");
     hold off
+    a = gca;
+    a.FontSize = 16;
     legend('$T_H$', '$T_E$', '$T_M$', '$B_{LL}$', '$B_E$', '$A$', 'Interpreter', 'latex')
     xlabel('Iteration', 'FontSize',18);
     ylabel('Time (h)', 'FontSize',18);
@@ -353,8 +352,6 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     % plot for yvals (peak shift)
     x = linspace(1, iter, iter);
     figure();
-    a = gca;
-    a.FontSize = 16;
     colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
     isNZ = (~V_yvals_plot == 0);      
     scatter(x(isNZ), V_yvals_plot(isNZ), "filled");
@@ -371,13 +368,13 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     isNZ = (~I_yvals_plot == 0);      
     scatter(x(isNZ), I_yvals_plot(isNZ), "filled");
     hold off
+    a = gca;
+    a.FontSize = 16;
     legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
     xlabel('Iteration', 'FontSize', 18);
     ylabel('log10 Fold Change', 'FontSize', 18);
     
     figure();
-    a = gca;
-    a.FontSize = 16;
     colororder(["#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
     isNZ = (~TH_yvals_plot == 0);      
     scatter(x(isNZ), TH_yvals_plot(isNZ), "filled");
@@ -394,19 +391,33 @@ function reinfections(params_file, params, dde_options, model_settings, init, it
     hold on
     scatter(x, A_yvals_plot, "filled");
     hold off
+    a = gca;
+    a.FontSize = 16;
     legend('$T_H$', '$T_E$', '$T_M$', '$B_{LL}$', '$B_E$', '$A$', 'Interpreter', 'latex')
     xlabel('Iteration', 'FontSize', 18);
     ylabel('log10 Fold Change', 'FontSize', 18);
 
-    function plot_var(xvals, yvals)
+    function plot_var(xvals, yvals, variable)
         j = 1:iter;
-        figure();
+        h=figure();
+        semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
+        xlabel('Time (h)', 'FontSize', 18);
+        xticks([0 400 800 1200 1600 2000])
+        if strcmp('V', variable)
+            ylabel('Concentration (TCID50/mL)', 'FontSize',18);
+        elseif strcmp('I', variable) || strcmp('A', variable)
+            ylabel('Concentration (pg/mL)', 'FontSize',18);
+        elseif strcmp('BLL', variable) ||strcmp('BE', variable) 
+            ylabel('Concentration (\mu L/mL)', 'FontSize',18);
+        else
+            ylabel('Number of Cells', 'FontSize',18);
+        end
         a = gca;
         a.FontSize = 16;
-        semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
-        xlabel('Time (h)', 'FontSize',18);
-        ylabel('Number of Cells', 'FontSize',18);
-        legend (sprintfc('G%i', j));
+        legend (sprintfc('G%i', j), 'FontSize', 14);
+        %title = append('basic_', lower(variable));
+        %saveas(h, fullfile('./reinfection_sims', title), 'png')
+
     end
     
     function s = ddefullhist(t)
