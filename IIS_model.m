@@ -82,7 +82,7 @@ function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, setti
         ax.FontSize = 16;
         colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
         xlabel('Time (h)', 'FontSize', 18);
-        ylabel('Number of Cells', 'FontSize', 18);
+        %ylabel('Number of Cells', 'FontSize', 18);
         legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
         saveas(h, fullfile('./simulations', title), 'png')
     end
