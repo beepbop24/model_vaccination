@@ -75,7 +75,7 @@ function inset_plots(params_file, params, hist, dde_options, settings, steady_st
     set(gca, 'FontSize', FontSize);
     colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
     xlabel('Time (h)');
-    ylabel('Number of Cells');
+    %ylabel('Number of Cells');
 
     if strcmp(state, 'iis_DF')
         legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex', 'Position', [0.775 0.725 0.1 0.1])
