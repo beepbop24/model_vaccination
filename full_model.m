@@ -81,7 +81,7 @@ function [full_sol, I_full, M_full] = full_model(params_file, params, hist, dde_
     if settings.plot
         h = figure();
         semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
-
+        
         if settings.dashed
             hold on
             yline(5.25*10^9, '--', 'LineWidth', 1.5, 'Color', 'black')
@@ -94,7 +94,7 @@ function [full_sol, I_full, M_full] = full_model(params_file, params, hist, dde_
         ax.FontSize = 16;
         colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30" "#CE7E00" "#C90076" "#6A329F" "#4DBEEE" "#A2142F" "#000000"])
         xlabel('Time (h)', 'FontSize',18);
-        %ylabel('Number of Cells', 'FontSize',18);
+        ylabel('Magnitude of Infection and IR', 'FontSize',18);
         legend('$V$', '$X$', '$Y$', '$R$', '$I$', '$B_{LL}$', '$B_E$', '$A$', '$T_E$', '$T_M$', '$T_H$', 'Interpreter', 'latex')
         saveas(h, fullfile('./simulations', title), 'png')
     end

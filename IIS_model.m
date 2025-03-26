@@ -23,6 +23,7 @@ function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, setti
 
     default_settings.stiff = true;
     default_settings.plot = true;
+    default_settings.dashed = false;
     
     default_setting_names = fieldnames(default_settings);
     setting_names = fieldnames(settings);
@@ -69,6 +70,11 @@ function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, setti
     if settings.plot
         h = figure();
         semilogy(xvals, 10.^(yvals), 'LineWidth', 1.5)
+        
+        %hold on
+        %r_cell = 5.25*10^9-10.^yvals(2,:)-10.^yvals(3,:);
+        %r_cell(r_cell < 1) = 1;
+        %semilogy(xvals, r_cell)
    
         if settings.dashed
             hold on
@@ -82,7 +88,7 @@ function [IIS_sol, M_full] = IIS_model(params_file, params, hist, options, setti
         ax.FontSize = 16;
         colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
         xlabel('Time (h)', 'FontSize', 18);
-        %ylabel('Number of Cells', 'FontSize', 18);
+        ylabel('Magnitude of Infection and IR', 'FontSize', 18);
         legend('$V$', '$X$', '$Y$', '$R$', '$I$', 'Interpreter', 'latex')
         saveas(h, fullfile('./simulations', title), 'png')
     end
