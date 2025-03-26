@@ -4,7 +4,6 @@ clearvars;
 params = struct();
 [X, Y] = meshgrid(linspace(-1.2, 1.5, 300), linspace(-3, 3, 300));
 
-
 % contour plot with default parameters for IIS model (UU)
 eq_contour_plot('default_params_full.mat', params, 'DF', 'I zero', X, Y, 'uu_zero');
 eq_contour_plot('default_params_full.mat', params, 'DF', 'I star', X, Y, 'uu_star');
@@ -74,7 +73,12 @@ function eq_contour_plot(params_file, params, state, steady_state_I, X, Y, title
         if strcmp(steady_state_I, 'I zero')
             I_star = 0;
         elseif strcmp(steady_state_I, 'I star')
+            % I_star for n_2 = 1
             I_star = params.b_2/params.d_i - params.k_2;
+
+            % I_star for n_2 = 2 (stable root)
+            I_star = (params.b_2 - sqrt(params.b_2^2-4*params.d_i^2*params.k_2^2))/(2*params.d_i);
+            disp(I_star)
         else
             error('Not a valid steady state definition');
         end
@@ -159,13 +163,13 @@ function charpoly_Df = characEq(lambda, I_star, params)
                  -params.beta*params.mu/params.d_x, -params.d_x, 0, 0, -params.k_ix*params.mu/params.d_x;
                  params.beta*params.mu/params.d_x, 0, -params.d_y, 0, 0;
                  0, 0, 0, -params.d_r, params.k_ix*params.mu/params.d_x;
-                 0, 0, params.k_i*exp(-lambda*params.tau_2), 0, params.b_2/params.k_2*exp(-lambda*params.tau_4)-params.d_i];
+                 0, 0, params.k_i*exp(-lambda*params.tau_2), 0, -params.d_i]; %params.b_2/params.k_2*exp(-lambda*params.tau_4)-params.d_i];
     else
         Df_x0 = [-params.d_v, 0, params.k*params.k1_tilde^params.n_1/(params.k1_tilde^params.n_1+I_star^params.n_1)*exp(-lambda*params.tau_1), 0, 0;
                  -params.beta*params.mu/(params.d_x+params.k_ix*I_star), - params.d_x-params.k_ix*I_star, 0, 0, -params.k_ix*params.mu/(params.d_x+params.k_ix*I_star);
                  params.beta*params.mu/(params.d_x+params.k_ix*I_star), 0, -params.d_y - params.k_iy*I_star, 0, 0;
                  0, params.k_ix*I_star, params.k_iy*I_star, -params.d_r, params.k_ix*params.mu/(params.d_x+params.k_ix*I_star);
-                 0, 0, params.k_i*exp(-lambda*params.tau_2), 0, params.k_2*params.b_2/(params.k_2+I_star)^2*exp(-lambda*params.tau_4)-params.d_i];
+                 0, 0, params.k_i*exp(-lambda*params.tau_2), 0, params.k_2^params.n_2*params.b_2*params.n_2*I_star^(params.n_2-1)/(params.k_2^params.n_2+I_star^params.n_2)^2*exp(-lambda*params.tau_4)-params.d_i];
     end
     charpoly_Df = abs(det(Df_x0-lambda*eye(5)));
 
