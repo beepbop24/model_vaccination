@@ -77,8 +77,7 @@ function eq_contour_plot(params_file, params, state, steady_state_I, X, Y, title
             I_star = params.b_2/params.d_i - params.k_2;
 
             % I_star for n_2 = 2 (stable root)
-            I_star = (params.b_2 - sqrt(params.b_2^2-4*params.d_i^2*params.k_2^2))/(2*params.d_i);
-            disp(I_star)
+            %I_star = (params.b_2 - sqrt(params.b_2^2-4*params.d_i^2*params.k_2^2))/(2*params.d_i);
         else
             error('Not a valid steady state definition');
         end
@@ -163,7 +162,7 @@ function charpoly_Df = characEq(lambda, I_star, params)
                  -params.beta*params.mu/params.d_x, -params.d_x, 0, 0, -params.k_ix*params.mu/params.d_x;
                  params.beta*params.mu/params.d_x, 0, -params.d_y, 0, 0;
                  0, 0, 0, -params.d_r, params.k_ix*params.mu/params.d_x;
-                 0, 0, params.k_i*exp(-lambda*params.tau_2), 0, -params.d_i]; %params.b_2/params.k_2*exp(-lambda*params.tau_4)-params.d_i];
+                 0, 0, params.k_i*exp(-lambda*params.tau_2), 0, params.b_2/params.k_2^params.n_2*exp(-lambda*params.tau_4)-params.d_i];
     else
         Df_x0 = [-params.d_v, 0, params.k*params.k1_tilde^params.n_1/(params.k1_tilde^params.n_1+I_star^params.n_1)*exp(-lambda*params.tau_1), 0, 0;
                  -params.beta*params.mu/(params.d_x+params.k_ix*I_star), - params.d_x-params.k_ix*I_star, 0, 0, -params.k_ix*params.mu/(params.d_x+params.k_ix*I_star);
