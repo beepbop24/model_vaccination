@@ -6,10 +6,13 @@ options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 % contour plot for beta, k_V
 params.tspan = [0, 500];
 
-beta_vals = linspace(10^(-3), 5*10^(-2), 100);
-k_vals = linspace(10^(-3), 1, 100);
+%beta_vals = linspace(10^(-3), 5*10^(-2), 10);
+%k_vals = linspace(10^(-3), 1, 10);
 
-param_contour_plot("full", "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
+beta_vals = linspace(0.02, 0.03, 10);
+k_vals = linspace(0.6, 0.8, 10);
+
+heat = param_contour_plot("full", "default_params_full.mat", params, @ddefullhist, options, beta_vals, k_vals, 1, 'default_betak');
 
 %% DEFAULT RUN FOR INFECTION -- IIS MODEL
 clearvars;
