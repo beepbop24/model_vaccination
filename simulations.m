@@ -72,7 +72,6 @@ params.tspan = [0, 500];
 options = ddeset('AbsTol', 1e-9, 'RelTol', 1e-9);
 settings = struct();
 settings.dashed = true;
-
 % UU
 IIS_sol = IIS_model("default_params_full.mat", params, @ddeIIShist, options, settings, 'iis_model');
 
@@ -112,7 +111,7 @@ params.tspan = [0, 100];
 IIS_sol = IIS_model("default_params_full.mat", params, @ddeIIShist, options, settings, 'viral_model');
 
 % simulation for R0 = 1 with inset
-params.tspan = [0, 5000];
+params.tspan = [0, 2000];
 default_params_full
 params.d_x = 10^(-1); 
 params.mu = log10(5.25*10^9)*params.d_x; 
