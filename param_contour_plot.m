@@ -1,4 +1,4 @@
-function param_contour_plot(model, params_file, params, hist, options, beta_vals, k_vals, option, title)
+function heat_matrix = param_contour_plot(model, params_file, params, hist, options, beta_vals, k_vals, option, title)
     % function that returns numerical simulations of the full immune system
     % for reinfections with INPUTS -- 
     % model: 'full' or 'iis'
@@ -32,6 +32,7 @@ function param_contour_plot(model, params_file, params, hist, options, beta_vals
 
             if option==1
                 heat_matrix(i, j) = (10^M_full(3))/(5.25*10^9);
+                
             elseif option==2
                 new_cells = params.beta.*sol.y(1,:).*sol.y(2,:);
                 heat_matrix(i, j) = trapz(new_cells);
