@@ -71,7 +71,11 @@ function inset_plots(params_file, params, hist, dde_options, settings, steady_st
     FontSize = 18; Width = 1.5;
 
     h = figure();
+    if strcmp(state, 'iis_DF')
     semilogy(xvals, 10.^(yvals), 'Linewidth', Width)
+    else
+        semilogy(xvals, 10.^(yvals(1:3,:)), 'Linewidth', Width)
+    end
     set(gca, 'FontSize', FontSize);
     colororder(["#0072BD" "#D95319" "#EDB120" "#7E2F8E" "#77AC30"])
     xlabel('Time (h)');
@@ -87,6 +91,7 @@ function inset_plots(params_file, params, hist, dde_options, settings, steady_st
     axes('Position', [0.6 0.275 0.25 0.3]) % numbers are adjustable: https://www.mathworks.com/help/matlab/ref/axes.html
     box on; 
     semilogy(xvals, vecnorm(yvals-star), 'Linewidth', Width, 'Color', '#A2142F'); % difference to steady state y*
+    legend('$| x-x^* |$', 'Interpreter', 'latex')
     set(gca,'FontSize', FontSize); 
     saveas(h, fullfile('./insets', title), 'png')
 end
